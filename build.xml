@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="HotelReservasPatrones" default="run" basedir=".">
+    <property name="src.dir" value="src"/>
+    <property name="test.dir" value="test"/>
+    <property name="smoke.dir" value="smoke"/>
+    <property name="build.dir" value="build"/>
+    <property name="classes.dir" value="${build.dir}/classes"/>
+    <property name="test.classes.dir" value="${build.dir}/test/classes"/>
+    <property name="smoke.classes.dir" value="${build.dir}/smoke/classes"/>
+    <property name="dist.dir" value="dist"/>
+    <property name="main.class" value="com.hotel.app.Main"/>
+
+    <path id="test.classpath">
+        <fileset dir="lib"><include name="*.jar"/></fileset>
+        <pathelement path="${classes.dir}"/>
+    </path>
+
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+        <delete dir="${dist.dir}"/>
+    </target>
+
+    <target name="compile">
+        <mkdir dir="${classes.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" release="17"
+               encoding="UTF-8" includeantruntime="false"/>
+    </target>
+
+    <target name="jar" depends="compile">
+        <mkdir dir="${dist.dir}"/>
+        <jar destfile="${dist.dir}/HotelReservasPatrones.jar" basedir="${classes.dir}">
+            <manifest><attribute name="Main-Class" value="${main.class}"/></manifest>
+        </jar>
+        <copy todir="${dist.dir}/data"><fileset dir="data"/></copy>
+    </target>
+
+    <target name="run" depends="jar">
+        <java jar="${dist.dir}/HotelReservasPatrones.jar" fork="true">
+            <sysproperty key="data.dir" value="data"/>
+        </java>
+    </target>
+
+    <target name="smoke" depends="compile">
+        <mkdir dir="${smoke.classes.dir}"/>
+        <javac srcdir="${smoke.dir}" destdir="${smoke.classes.dir}" release="17"
+               encoding="UTF-8" includeantruntime="false">
+            <classpath><pathelement path="${classes.dir}"/></classpath>
+        </javac>
+        <java classname="com.hotel.smoke.SmokeTestRunner" fork="true" failonerror="true">
+            <classpath><pathelement path="${classes.dir}"/><pathelement path="${smoke.classes.dir}"/></classpath>
+        </java>
+    </target>
+
+    <target name="deps" description="Descarga JUnit 5 y Mockito; requiere internet solo la primera vez">
+        <mkdir dir="lib"/>
+        <get src="https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone/1.10.2/junit-platform-console-standalone-1.10.2.jar"
+             dest="lib/junit-platform-console-standalone-1.10.2.jar" skipexisting="true"/>
+        <get src="https://repo1.maven.org/maven2/org/mockito/mockito-core/5.12.0/mockito-core-5.12.0.jar"
+             dest="lib/mockito-core-5.12.0.jar" skipexisting="true"/>
+        <get src="https://repo1.maven.org/maven2/net/bytebuddy/byte-buddy/1.14.15/byte-buddy-1.14.15.jar"
+             dest="lib/byte-buddy-1.14.15.jar" skipexisting="true"/>
+        <get src="https://repo1.maven.org/maven2/net/bytebuddy/byte-buddy-agent/1.14.15/byte-buddy-agent-1.14.15.jar"
+             dest="lib/byte-buddy-agent-1.14.15.jar" skipexisting="true"/>
+        <get src="https://repo1.maven.org/maven2/org/objenesis/objenesis/3.3/objenesis-3.3.jar"
+             dest="lib/objenesis-3.3.jar" skipexisting="true"/>
+    </target>
+
+    <target name="compile-test" depends="compile,deps">
+        <mkdir dir="${test.classes.dir}"/>
+        <javac srcdir="${test.dir}" destdir="${test.classes.dir}" release="17"
+               encoding="UTF-8" includeantruntime="false">
+            <classpath refid="test.classpath"/>
+        </javac>
+    </target>
+
+    <target name="test" depends="compile-test">
+        <java classname="org.junit.platform.console.ConsoleLauncher" fork="true" failonerror="true">
+            <classpath><path refid="test.classpath"/><pathelement path="${test.classes.dir}"/></classpath>
+            <arg value="execute"/><arg value="--scan-classpath"/>
+        </java>
+    </target>
+</project>
