@@ -1,0 +1,16 @@
+RESULTADO DE VERIFICACIÓN LOCAL
+
+Comando ejecutado:
+ant clean jar smoke
+
+Resultado:
+BUILD SUCCESSFUL
+SMOKE TEST OK: flujo crear-reservar-cancelar-persistir.
+
+Entorno de verificación:
+- Compilación Java con release 17.
+- Apache ANT 1.10.15.
+
+Pruebas JUnit 5 + Mockito incluidas en la carpeta test.
+Ejecutar con internet:
+ant test

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://www.netbeans.org/ns/project/1">
+  <type>org.netbeans.modules.ant.freeform</type>
+  <configuration>
+    <general-data xmlns="http://www.netbeans.org/ns/freeform-project/1">
+      <name>HotelReservasPatrones</name>
+      <properties/>
+      <folders>
+        <source-folder><label>Source Packages</label><type>java</type><location>src</location></source-folder>
+        <source-folder><label>Test Packages</label><type>java</type><location>test</location></source-folder>
+      </folders>
+      <ide-actions>
+        <action name="build"><target>jar</target></action>
+        <action name="clean"><target>clean</target></action>
+        <action name="run"><target>run</target></action>
+        <action name="test"><target>test</target></action>
+      </ide-actions>
+      <view>
+        <items>
+          <source-folder style="packages"><label>Source Packages</label><location>src</location></source-folder>
+          <source-folder style="packages"><label>Test Packages</label><location>test</location></source-folder>
+          <source-file><location>README.md</location></source-file>
+        </items>
+        <context-menu>
+          <ide-action name="build"/><ide-action name="clean"/><ide-action name="run"/><ide-action name="test"/>
+        </context-menu>
+      </view>
+    </general-data>
+  </configuration>
+</project>
